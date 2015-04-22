@@ -16,7 +16,7 @@ RUN apt-get update && apt-get -qy upgrade && apt-get install -qy \
   language-pack-en \
   git \
   curl \
-  zlib1g-dev libssl-dev libreadline-dev libyaml-dev libxml2-dev libxslt-dev &&
+  zlib1g-dev libssl-dev libreadline-dev libyaml-dev libxml2-dev libxslt-dev && \
   apt-get clean
 
 # setup utf locale
@@ -27,7 +27,7 @@ RUN useradd -ms /bin/bash --uid 1000 --gid 50 deploy
 
 # install ruby to deploy's home directory
 WORKDIR $HOME
-  git clone git://github.com/sstephenson/rbenv.git ~/.rbenv && \
+RUN git clone git://github.com/sstephenson/rbenv.git ~/.rbenv && \
   echo 'export PATH="$HOME/.rbenv/shims:$HOME/.rbenv/bin:$PATH"' >> .bashrc && \
   echo 'eval "$(rbenv init -)"' >> .bashrc && \
   eval "$(rbenv init -)" && \
@@ -49,7 +49,7 @@ RUN gem install bundler && \
 # change permissions
 RUN chown -R deploy:staff $SITE && \
   chown -R deploy:staff $HOME/.rbenv/ && \
-  chown deploy:staff $HOME/.bashrc && \
+  chown deploy:staff $HOME/.bashrc
 USER deploy
 RUN chmod -R 755 $SITE && \
   chmod -R 755 $HOME/.rbenv/ && \
